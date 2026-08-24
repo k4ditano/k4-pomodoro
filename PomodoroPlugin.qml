@@ -28,10 +28,23 @@ K4.Plugin {
     name: "pomodoro"
     title: K4.Idioma.t("Pomodoro")
 
-    //  Por debajo del lanzador y del centro de control: cuando una fase acaba
-    //  esto se abre solo, y abrirse solo encima de lo que estabas haciendo es
-    //  de mala educación.
-    priority: 40
+    //  ── por qué 58 y no un número redondo ────────────────────────
+    //
+    //  Tiene que estar POR ENCIMA de las vistas de reposo —reloj 50,
+    //  reproductor 55— y por debajo de todo lo que abres a propósito: aviso
+    //  59, centro de control 60, mazmorra 64, ajustes 66, lanzador 80.
+    //
+    //  Lo de arriba no es simetría: en 40 este panel era IMPOSIBLE DE CERRAR.
+    //  Para llegar a su ✕ hay que meter el ratón en la island, y eso enciende
+    //  `Island.hovered`, que activa el reloj — que con 50 le ganaba. El panel
+    //  se convertía en el reloj justo cuando ibas a cerrarlo. Con la barra en
+    //  modo escondida se ve todavía antes, porque entrar es lo primero que
+    //  haces.
+    //
+    //  Y por debajo de 59 a propósito: esto se abre SOLO al acabar una fase, y
+    //  hacerlo encima del centro de control o de lo que tuvieras abierto es de
+    //  mala educación. Un aviso que interrumpe deja de ser un aviso.
+    priority: 58
 
     islandWidth: 330
     islandHeight: 176
