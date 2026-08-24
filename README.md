@@ -23,6 +23,10 @@ quickshell ipc -p shell.qml call k4 pluginEnable pomodoro
 
 It installs the exact commit you name, not the tip of a branch.
 
+It declares itself an **application**, so it shows up in the app centre's grid
+and in the launcher — a plugin that is installed but cannot be found is a
+plugin nobody uses.
+
 ## What it does
 
 - **In the pill**: the remaining time, tinted red while you work and green
