@@ -1,0 +1,10 @@
+{
+  "id": "pomodoro",
+  "entry": "PomodoroPlugin.qml",
+  "version": "1.0.0",
+  "title": "Pomodoro",
+  "description": "A focus timer that lives in the island: the countdown rides in the pill and the island opens when a phase ends",
+  "host": ">=1.1.0",
+  "permisos": ["sonido"],
+  "superficies": ["island", "pildora", "ipc", "atajo"]
+}
