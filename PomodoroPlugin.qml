@@ -175,6 +175,7 @@ K4.Plugin {
 
         //  Y se abre a decirlo. Esto es lo único que este plugin hace sin que
         //  se lo pidan, y es la razón de que exista en una island.
+        avisoSolo = true
         abierto = true
         cerrarSolo.restart()
     }
@@ -244,8 +245,48 @@ K4.Plugin {
     // ── la island ─────────────────────────────────────────────────
     property bool abierto: false
     active: abierto
-    function toggle() { abierto = !abierto }
     function close() { abierto = false }
+
+    function toggle() {
+        avisoSolo = false          // lo abres tú: el teclado es tuyo
+        abierto = !abierto
+    }
+
+    //  ── cerrarlo, que es la mitad que faltaba ────────────────────
+    //
+    //  Sin esto no había forma de cerrarlo: el ESC no llegaba y un toque en el
+    //  fondo abría el centro de control ENCIMA, que es peor que no hacer nada.
+    //
+    //  El ESC no llega solo. Una capa recibe teclas si el compositor se las da,
+    //  y «bajo demanda» significa cuando PINCHAS la superficie — pero a esto se
+    //  llega desde el centro de aplicaciones, desde un atajo o porque se abre
+    //  sola, y ahí no pincha nadie. La documentación de `K4.Plugin` lo dice con
+    //  todas las letras: lo que se abre, se mira y se cierra quiere
+    //  `grabKeyboard`, aunque no se escriba en ello.
+    //
+    //  Pero NO cuando se abre sola. `grabKeyboard` deja al escritorio sin
+    //  teclado mientras esté abierto, y esto se abre por su cuenta al acabar
+    //  una fase: quedarse con tus teclas nueve segundos porque un temporizador
+    //  ha terminado es robar. Se coge el teclado solo si lo has abierto tú, y
+    //  el aviso se conforma con el ratón.
+    property bool avisoSolo: false
+    grabKeyboard: abierto && !avisoSolo
+
+    //  Y un toque en el fondo lo cierra. Sin declararlo, el host entiende que
+    //  el toque no es tuyo y abre el centro de control por encima.
+    handlesBackgroundTap: true
+    onBackgroundTapped: raiz.close()
+
+    //  Si te acercas a un aviso, deja de ser un aviso: se queda hasta que lo
+    //  cierres, y con el teclado, para que el ESC funcione como en todo lo
+    //  demás.
+    property Connections deLaIsla: Connections {
+        target: K4.Isla
+        function onRatonChanged() {
+            if (K4.Isla.raton && raiz.abierto)
+                raiz.avisoSolo = false
+        }
+    }
 
     view: Component {
         PomodoroView { plugin: raiz }
@@ -371,7 +412,13 @@ K4.Plugin {
     K4.Ipc {
         target: "k4.pomodoro"
 
+        //  Ojo con los dos «alternar» que hay aquí: este es el del RELOJ
+        //  —empezar, pausar, seguir—, que es lo que se pulsa mil veces. El del
+        //  panel son `ver` y `cerrar`, y existen porque sin ellos no había
+        //  manera de abrirlo desde fuera: ni para un guion, ni para probarlo.
         function alternar(): void { raiz.alternar() }
+        function ver(): void { raiz.avisoSolo = false; raiz.abierto = true }
+        function cerrar(): void { raiz.close() }
         function empezar(): void { raiz.empezar("trabajo") }
         function pausar(): void { raiz.pausar() }
         function saltar(): void { raiz.saltar() }

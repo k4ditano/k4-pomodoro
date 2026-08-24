@@ -38,6 +38,9 @@ plugin nobody uses.
   opens to tell you — then closes on its own if you ignore it. Four tomatoes
   earn the long break.
 
+Close it with the **✕**, with **Esc**, or by tapping the panel's background —
+any of the three.
+
 ## Settings
 
 Under **Settings → Pomodoro**: focus length (15/25/50), short break (3/5/10),
@@ -60,7 +63,12 @@ quickshell ipc -p $qs call k4.pomodoro pausar
 quickshell ipc -p $qs call k4.pomodoro saltar
 quickshell ipc -p $qs call k4.pomodoro parar
 quickshell ipc -p $qs call k4.pomodoro estado    # JSON, for scripts and bars
+quickshell ipc -p $qs call k4.pomodoro ver       # open the panel
+quickshell ipc -p $qs call k4.pomodoro cerrar    # close it
 ```
+
+`alternar` is the *clock* — start, pause, resume. `ver` and `cerrar` are the
+panel.
 
 ## Two decisions worth knowing
 

@@ -30,6 +30,26 @@ K4.Aparicion {
 
     anchors.fill: parent
 
+    //  ── la cruz ───────────────────────────────────────────────────
+    //
+    //  Va aquí y no en el host porque la island no pone ninguna: cada módulo
+    //  dibuja la suya si la quiere. Y la quiere: el ESC y el toque en el fondo
+    //  cierran, pero los dos hay que saberlos. Una cruz no hay que saberla.
+    //
+    //  Discreta y arriba a la derecha, donde se busca — y encima del resto en
+    //  z para que ningún control se la coma.
+    K4.Boton {
+        z: 3
+        glifo: String.fromCodePoint(0xF0156)   // md-close
+        tamano: 14
+        color: K4.Tema.tenue
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.topMargin: 10
+        anchors.rightMargin: 12
+        onPulsado: vista.plugin.close()
+    }
+
     Item {
         anchors.centerIn: parent
         width: parent.width
